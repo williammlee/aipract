@@ -16,7 +16,7 @@ from src.env import ChromeDino
 def helper_arg():
     parameters = argparse.ArgumentParser(
         """Implementation of Q Learning to play Chrome Dino""")
-    parameters.add_argument("--batch_size", type=int, default=2)
+    parameters.add_argument("--batch_size", type=int, default=16)
     parameters.add_argument("--optimizer", type=str,
                      choices=["sgd", "adam"], default="adam")
     parameters.add_argument("--lr", type=float, default=1e-4)
@@ -64,7 +64,7 @@ def train_func(input):
     state, _, _ = env.step(0)
     state = torch.cat(tuple(state for _ in range(4)))[None, :, :, :]
     while iter < input.num_iters:
-       
+        
         prediction = model(state)[0]
         
         # Exploration or exploitation
@@ -116,6 +116,8 @@ def train_func(input):
             torch.save(check, check_path)
             with open(mem_path, "wb") as f:
                 pickle.dump(replay_memory, f, protocol=pickle.HIGHEST_PROTOCOL)
+
+        
 
 
 if __name__ == "__main__":

@@ -16,7 +16,7 @@ mixer.pre_init(44100, -16, 2, 2048)
 init()
 
 screen_size = (width, height) = (600, 150)
-fps = 60
+fps = 30
 gravity = 0.6
 
 black = (0, 0, 0)
@@ -25,6 +25,7 @@ background_col = (235, 235, 235)
 
 high_score = 0
 
+scorelist = []
 screen = display.set_mode(screen_size)
 clock = time.Clock()
 display.set_caption("AI Practicum Final Project")
@@ -361,6 +362,9 @@ class ChromeDino(object):
         self.HI_rect.top = height * 0.1
         self.HI_rect.left = width * 0.73
 
+
+        
+
     def step(self, action, record=False):  # 0: Do nothing. 1: Jump. 2: Duck
         reward = 0.1
         if action == 0:
@@ -438,6 +442,14 @@ class ChromeDino(object):
         display.update()
         clock.tick(fps)
 
+        temp = 0
+        
+        if self.playerDino.score != 0:
+            temp = max(self.playerDino.score, temp)
+       
+
+            
+
         if self.playerDino.dead:
             self.gameOver = True
 
@@ -445,6 +457,10 @@ class ChromeDino(object):
 
         if self.gameOver:
             self.__init__()
+            scorelist.append(temp)
+            print(scorelist)
+        
+            
 
         state = array3d(state)
         if record:
